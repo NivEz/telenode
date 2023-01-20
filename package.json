@@ -6,7 +6,7 @@
   "author": "Niv Ezra",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon ."
+    "dev": "nodemon ./examples"
   },
   "dependencies": {
     "express": "^4.18.2"
