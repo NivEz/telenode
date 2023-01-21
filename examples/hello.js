@@ -9,4 +9,5 @@ bot.createServer();
 
 bot.onTextMessage('hello', async (messageBody) => {
 	console.log(messageBody);
+	await bot.sendTextMessage('hello back', messageBody.chat.id);
 });

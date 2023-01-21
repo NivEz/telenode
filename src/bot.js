@@ -1,4 +1,5 @@
 const { runServer } = require('./server');
+const axios = require('axios');
 
 class TeleNode {
 	#baseUrl;
@@ -22,6 +23,14 @@ class TeleNode {
 	onTextMessage(message, handler) {
 		this.textHandlers[message] = handler;
 	};
+
+	async sendTextMessage(text, chatId) {
+		const url = this.#baseUrl + '/sendMessage';
+		await axios.post(url, {
+			chat_id: chatId,
+			text,
+		});
+	}
 }
 
 module.exports = TeleNode;
