@@ -6,8 +6,9 @@ const runServer = (bot) => {
 	server.use(express.json());
 
 	server.post('/', (req, res) => {
-		if (req.body?.message?.text) {
-			bot.textMessageHandler(req.body.message.text);
+		const message = req.body?.message;
+		if (message) {
+			bot.messageHandler(message);
 		}
 		res.end();
 	});
@@ -18,5 +19,5 @@ const runServer = (bot) => {
 };
 
 module.exports = {
-	runServer
-}
+	runServer,
+};

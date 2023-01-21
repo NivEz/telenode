@@ -1,16 +1,22 @@
 const { runServer } = require('./server');
 
 class TeleNode {
-	constructor() {
+	#baseUrl;
+
+	constructor({ apiToken }) {
 		this.textHandlers = {};
+		this.#baseUrl = 'https://api.telegram.org/bot' + apiToken;
 	}
 
 	createServer() {
 		runServer(this);
 	}
 
-	textMessageHandler(receivedMessage) {
-		this.textHandlers[receivedMessage] && this.textHandlers[receivedMessage]();
+	messageHandler(receivedMessage) {
+		if (receivedMessage.text) {
+			const textHandler = this.textHandlers[receivedMessage.text];
+			if (textHandler) textHandler(receivedMessage);
+		}
 	};
 
 	onTextMessage(message, handler) {
