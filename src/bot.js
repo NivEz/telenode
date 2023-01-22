@@ -6,6 +6,7 @@ class TeleNode {
 
 	constructor({ apiToken }) {
 		this.textHandlers = {};
+		this.anyTextHandler = null;
 		this.#baseUrl = 'https://api.telegram.org/bot' + apiToken;
 	}
 
@@ -16,13 +17,21 @@ class TeleNode {
 	messageHandler(receivedMessage) {
 		if (receivedMessage.text) {
 			const textHandler = this.textHandlers[receivedMessage.text];
-			if (textHandler) textHandler(receivedMessage);
+			if (textHandler) {
+				textHandler(receivedMessage);
+			} else if (this.anyTextHandler) {
+				this.anyTextHandler(receivedMessage);
+			}
 		}
 	};
 
 	onTextMessage(message, handler) {
 		this.textHandlers[message] = handler;
 	};
+
+	onAnyTextMessage(handler) {
+		this.anyTextHandler = handler;
+	}
 
 	async sendTextMessage(text, chatId) {
 		const url = this.#baseUrl + '/sendMessage';
