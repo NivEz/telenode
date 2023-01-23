@@ -7,6 +7,6 @@ const bot = new TeleNode({
 
 bot.createServer();
 
-bot.onAnyTextMessage(async (messageBody) => {
+bot.onTextMessage(undefined, async (messageBody) => {
 	await bot.sendTextMessage(messageBody.text, messageBody.chat.id);
 });

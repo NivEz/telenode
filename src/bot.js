@@ -26,12 +26,12 @@ class TeleNode {
 	};
 
 	onTextMessage(message, handler) {
-		this.textHandlers[message] = handler;
+		if (message === undefined) {
+			this.anyTextHandler = handler;
+		} else {
+			this.textHandlers[message] = handler;
+		}
 	};
-
-	onAnyTextMessage(handler) {
-		this.anyTextHandler = handler;
-	}
 
 	async sendTextMessage(text, chatId) {
 		const url = this.#baseUrl + '/sendMessage';
