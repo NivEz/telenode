@@ -3,10 +3,10 @@
   "version": "1.0.1-0",
   "description": "Lightweight Telegram API framework for Node.js",
   "main": "index.js",
-  "author": "Niv Ezra",
+  "author": "Niv Ezra <dev@nivezra.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon ./examples",
+    "dev": "nodemon ./scripts/runDev.js",
     "publish:dry": "npm publish --dry-run",
     "set-webhook": "node ./scripts/setWebhook.js"
   },

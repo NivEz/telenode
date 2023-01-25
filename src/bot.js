@@ -1,7 +1,7 @@
 const { runServer } = require('./server');
 const axios = require('axios');
 
-class TeleNode {
+class Telenode {
 	#baseUrl;
 
 	constructor({ apiToken }) {
@@ -42,4 +42,4 @@ class TeleNode {
 	}
 }
 
-module.exports = TeleNode;
+module.exports = Telenode;

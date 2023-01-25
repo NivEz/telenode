@@ -1,7 +1,7 @@
-const TeleNode = require('../src/bot');
+const Telenode = require('../src/bot');
 require('dotenv').config();
 
-const bot = new TeleNode({
+const bot = new Telenode({
 	apiToken: process.env.API_TOKEN,
 });
 

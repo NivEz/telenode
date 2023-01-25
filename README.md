@@ -1,7 +1,11 @@
-# telenode-js
+# Telenode
 
 
 Lightweight Telegram API framework for Node.js
+
+![npm package](https://img.shields.io/badge/-grey?logo=telegram)
+[![npm package](https://img.shields.io/npm/v/telenode-js?color=orange&logo=npm)](https://www.npmjs.org/package/telenode-js)
+[![MIT licensed](https://img.shields.io/badge/license-MIT-green.svg)](https://raw.githubusercontent.com/NivEz/telenode/main/LICENSE)
 
 ---
 
@@ -28,10 +32,10 @@ npm exec set-webhook
 ### Usage
 
 ```
-const TeleNode = require('../src/bot');
+const Telenode = require('telenode-js');
 require('dotenv').config();
 
-const bot = new TeleNode({
+const bot = new Telenode({
 	apiToken: process.env.API_TOKEN,
 });
 
@@ -45,5 +49,15 @@ bot.onTextMessage('hello', async (messageBody) => {
 
 In this example the bot will listen only to 'hello' text messages and will respond to the user 'hello back'. Any other message will be ignored.
 
-
 Additional examples can be found in the [examples folder](https://github.com/NivEz/telenode/tree/main/examples).
+
+---
+
+### TODO's
+
+- [ ] Regex matching on text messages
+- [ ] Buttons support (sending & listening)
+- [ ] Direct respond function in message handler without passing chat ID
+- [ ] Chat ID handlers
+- [ ] Arguments validations
+- [ ] Add tests
