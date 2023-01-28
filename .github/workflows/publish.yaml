@@ -1,0 +1,23 @@
+name: Publish package to NPM
+on:
+  workflow_dispatch:
+    branches:
+      - '**'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Publish package to NPM
+        id: publish
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+
+      - if: steps.publish.outputs.type != 'none'
+        run: |
+          echo Successfully published a new version
+          echo "${{ steps.publish.outputs.type }} update: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"
