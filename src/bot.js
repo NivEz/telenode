@@ -1,14 +1,12 @@
 const { runServer } = require('./server');
 const axios = require('axios');
-const { stringToRegex } = require('../utils/stringToRegex');
 
 class Telenode {
 	#baseUrl;
 
 	constructor({ apiToken }) {
 		this.textHandlers = {};
-		this.regexHandlers = {};
-		this.arrRegex = [];
+		this.arrRegexHandlers = [];
 		this.anyTextHandler = null;
 		this.#baseUrl = 'https://api.telegram.org/bot' + apiToken;
 	}
@@ -19,35 +17,42 @@ class Telenode {
 
 	messageHandler(receivedMessage) {
 		const msg = receivedMessage.text;
-		if (msg) {
-			const textHandler = this.textHandlers[msg];
-			if (textHandler) {
-				textHandler(receivedMessage);
-			} else if (this.arrRegex.length) {
-				this.arrRegex.forEach(re => {
-					if (msg.match(re.pattern)) {
-						re.handler(receivedMessage);
-					}
-				});
-			} else if (this.anyTextHandler) {
-				this.anyTextHandler(receivedMessage);
+		if (!msg) {
+			return;
+		}
+
+		const textHandler = this.textHandlers[msg];
+		if (textHandler) {
+			textHandler(receivedMessage);
+			return;
+		}
+		this.arrRegexHandlers.some(re => {
+			const isMatch = msg.match(re.pattern);
+			if (isMatch) {
+				re.handler(receivedMessage);
+				// Return true to stop the loop
+				return true;
 			}
+		});
+		// This should be the final step to validate that no matches occurred
+		if (this.anyTextHandler) {
+			this.anyTextHandler(receivedMessage);
+			return;
 		}
 	};
 
 	onTextMessage(message, handler) {
 		if (message === undefined) {
 			this.anyTextHandler = handler;
-		} else {
-			if (message instanceof RegExp) {
-				this.regexHandlers[message] = handler;
-				this.arrRegex.push({
-					pattern: message, handler,
-				});
-			} else {
-				this.textHandlers[message] = handler;
-			}
+		} else if (message instanceof RegExp) {
+			this.arrRegexHandlers.push({
+				pattern: message,
+				handler,
+			});
+		} else if (typeof message === 'string') {
+			this.textHandlers[message] = handler;
 		}
+
 	};
 
 	async sendTextMessage(text, chatId) {
@@ -61,19 +66,3 @@ class Telenode {
 
 module.exports = Telenode;
 
-
-// else if (Object.keys(this.regexHandlers).length) {
-// 	for (const key in this.regexHandlers) {
-// 		console.log('-> key', key);
-// 		const re = stringToRegex(key)
-// 		console.log("-> re", re);
-// 		const matches = msg.match(re);
-// 		console.log("-> matches", matches);
-// 		if (matches) {
-// 			console.log('MATCH!!!!');
-// 			const regexHandler = this.regexHandlers[key];
-// 			regexHandler(receivedMessage);
-// 			break;
-// 		}
-// 	}
-// }
