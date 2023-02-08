@@ -32,7 +32,7 @@ npm exec set-webhook
 ### Usage
 
 ```
-const Telenode = require('telenode');
+const Telenode = require('telenode-js');
 require('dotenv').config();
 
 const bot = new Telenode({

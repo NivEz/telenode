@@ -12,7 +12,10 @@ on:
           - patch
           - minor
           - major
-        required: true
+        default: patch
+
+permissions:
+  contents: write
 
 jobs:
   bump:
