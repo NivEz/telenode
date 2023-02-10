@@ -23,8 +23,19 @@ jobs:
           echo Successfully published a new version
           echo "${{ steps.publish.outputs.type }} update: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"
 
+  github-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Get package version
+        run: echo "LATEST_TAG=$(jq -r .version package.json)" >> $GITHUB_ENV
+
       - name: Create Github release
         uses: ncipollo/release-action@v1
         with:
-          tag: v${{ steps.publish.outputs.version }}
+          tag: 'v${{ env.LATEST_TAG }}'
           generateReleaseNotes: true
