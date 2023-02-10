@@ -26,7 +26,7 @@ The webhook url will be stored in a `.env` file in the root of your project as `
 Then you can execute the following command:
 
 ```
-npm exec set-webhook
+npx set-webhook
 ```
 
 ### Usage
@@ -55,7 +55,7 @@ Additional examples can be found in the [examples folder](https://github.com/Niv
 
 ### TODO's
 
-- [ ] Regex matching on text messages
+- [x] Regex matching on text messages
 - [ ] Buttons support (sending & listening)
 - [ ] Direct respond function in message handler without passing chat ID
 - [ ] Chat ID handlers
