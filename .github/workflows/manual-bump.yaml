@@ -1,0 +1,36 @@
+name: Manual bump
+on:
+  workflow_dispatch:
+    branches:
+      - '**'
+    inputs:
+      bump:
+        description: 'Choose a bump type'
+        type: choice
+        options:
+          - prerelease
+          - patch
+          - minor
+          - major
+        default: patch
+
+permissions:
+  contents: write
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup git config
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "${{ secrets.GIT_CONFIG_EMAIL }}"
+
+      - name: Bump version
+        run: npm version ${{ inputs.bump }} -m "v%s"
+
+      - name: Push
+        run: git push --follow-tags
