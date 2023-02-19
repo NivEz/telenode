@@ -42,17 +42,18 @@ class Telenode {
 	};
 
 	onTextMessage(message, handler) {
-		if (message === undefined) {
-			this.anyTextHandler = handler;
+		if (typeof message === 'string') {
+			if (message === '') {
+				this.anyTextHandler = handler;
+			} else {
+				this.textHandlers[message] = handler;
+			}
 		} else if (message instanceof RegExp) {
 			this.arrRegexHandlers.push({
 				pattern: message,
 				handler,
 			});
-		} else if (typeof message === 'string') {
-			this.textHandlers[message] = handler;
 		}
-
 	};
 
 	async sendTextMessage(text, chatId) {
