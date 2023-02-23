@@ -37,9 +37,8 @@ class Telenode {
 		// This should be the final step to validate that no matches occurred
 		if (this.anyTextHandler) {
 			this.anyTextHandler(receivedMessage);
-			return;
 		}
-	};
+	}
 
 	onTextMessage(message, handler) {
 		if (typeof message === 'string') {
@@ -54,7 +53,7 @@ class Telenode {
 				handler,
 			});
 		}
-	};
+	}
 
 	async sendTextMessage(text, chatId) {
 		const url = this.#baseUrl + '/sendMessage';
@@ -63,7 +62,20 @@ class Telenode {
 			text,
 		});
 	}
+
+	async sendInlineKeyboard(chatId, text, inlineKeyboard) {
+		if (!text) {
+			throw Error('text parameter is required');
+		}
+		const url = this.#baseUrl + '/sendMessage';
+		await axios.post(url, {
+			chat_id: chatId,
+			text,
+			reply_markup: {
+				inline_keyboard: inlineKeyboard,
+			},
+		});
+	}
 }
 
 module.exports = Telenode;
-
