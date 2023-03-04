@@ -20,7 +20,7 @@ bot.onButton('exit', callbackQuery => {
 	bot.sendTextMessage(`Bye bye ${senderName}! See you next time`, callbackQuery.message.chat.id);
 });
 
-bot.onButton('welcome', callbackQuery => {
+bot.onButton('hello', callbackQuery => {
 	const senderName = callbackQuery.from.first_name;
 	bot.sendTextMessage(`Hello ${senderName}! How are you?`, callbackQuery.message.chat.id);
 });
@@ -34,8 +34,8 @@ const inlineKeyboard = [
 	],
 	[
 		{
-			text: 'Welcome',
-			callback_data: 'welcome',
+			text: 'Say hello',
+			callback_data: 'hello',
 		},
 		{
 			text: 'Exit',
