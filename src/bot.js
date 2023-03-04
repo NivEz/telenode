@@ -8,6 +8,7 @@ class Telenode {
 		this.textHandlers = {};
 		this.arrRegexHandlers = [];
 		this.anyTextHandler = null;
+		this.buttonHandlers = {};
 		this.#baseUrl = 'https://api.telegram.org/bot' + apiToken;
 	}
 
@@ -15,28 +16,52 @@ class Telenode {
 		runServer(this);
 	}
 
-	messageHandler(receivedMessage) {
-		const msg = receivedMessage.text;
+	telenodeHandler(reqBody) {
+		// TODO - get message type and use switch case for the types
+		if (!reqBody) {
+			return;
+		}
+		if (reqBody.message) {
+			this.textMessageHandler(reqBody.message);
+		}
+		if (reqBody.callback_query) {
+			this.inlineMarkupHandler(reqBody.callback_query);
+		}
+	}
+
+	textMessageHandler(receivedMsg) {
+		const msg = receivedMsg.text;
 		if (!msg) {
 			return;
 		}
 
 		const textHandler = this.textHandlers[msg];
 		if (textHandler) {
-			textHandler(receivedMessage);
+			textHandler(receivedMsg);
 			return;
 		}
 		this.arrRegexHandlers.some(re => {
 			const isMatch = msg.match(re.pattern);
 			if (isMatch) {
-				re.handler(receivedMessage);
+				re.handler(receivedMsg);
 				// Return true to stop the loop
 				return true;
 			}
 		});
 		// This should be the final step to validate that no matches occurred
 		if (this.anyTextHandler) {
-			this.anyTextHandler(receivedMessage);
+			this.anyTextHandler(receivedMsg);
+		}
+	}
+
+	inlineMarkupHandler(callbackQuery) {
+		const buttonData = callbackQuery.data;
+		if (!buttonData) {
+			return;
+		}
+		const buttonHandler = this.buttonHandlers[buttonData];
+		if (buttonHandler) {
+			buttonHandler(callbackQuery);
 		}
 	}
 
@@ -53,6 +78,13 @@ class Telenode {
 				handler,
 			});
 		}
+	}
+
+	onButton(buttonDataTrigger, handler) {
+		if (!buttonDataTrigger || typeof buttonDataTrigger !== 'string') {
+			return;
+		}
+		this.buttonHandlers[buttonDataTrigger] = handler;
 	}
 
 	async sendTextMessage(text, chatId) {
