@@ -105,6 +105,33 @@ class Telenode {
 			text,
 			reply_markup: {
 				inline_keyboard: inlineKeyboard,
+				one_time_keyboard: false,
+			},
+		});
+	}
+
+	async sendReplyKeyboard(chatId, text, replyKeyboard, oneTimeKeyboard) {
+		if (!text) {
+			throw Error('text parameter is required');
+		}
+		const url = this.#baseUrl + '/sendMessage';
+		await axios.post(url, {
+			chat_id: chatId,
+			text,
+			reply_markup: {
+				keyboard: replyKeyboard,
+				one_time_keyboard: oneTimeKeyboard,
+			},
+		});
+	}
+
+	async removeReplyKeyboard(chatId, text) {
+		const url = this.#baseUrl + '/sendMessage';
+		await axios.post(url, {
+			chat_id: chatId,
+			text: text,
+			reply_markup: {
+				remove_keyboard: true,
 			},
 		});
 	}
