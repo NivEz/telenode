@@ -105,7 +105,6 @@ class Telenode {
 			text,
 			reply_markup: {
 				inline_keyboard: inlineKeyboard,
-				one_time_keyboard: false,
 			},
 		});
 	}
