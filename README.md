@@ -76,11 +76,14 @@ npm run dev --file=<example>
 ✅ Fallback messages handler (empty string)
 <br>
 ✅ Regex matching on text messages
+<br>
+✅ Buttons support (inline keyboard, reply keyboard and remove reply keyboard)
 
 ## TODO's
 
-- [ ] Buttons support (sending & listening)
 - [ ] Direct respond function in message handler without passing chat ID
 - [ ] Chat ID handlers
 - [ ] Arguments validations
+- [ ] Optimize Telegram API requests
+- [ ] Support edit reply markup
 - [ ] Add tests

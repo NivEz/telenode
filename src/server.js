@@ -2,14 +2,11 @@ const express = require('express');
 const server = express();
 const port = 3000;
 
-const runServer = (bot) => {
+const runServer = bot => {
 	server.use(express.json());
 
 	server.post('/', (req, res) => {
-		const message = req.body?.message;
-		if (message) {
-			bot.messageHandler(message);
-		}
+		bot.telenodeHandler(req.body);
 		res.end();
 	});
 
