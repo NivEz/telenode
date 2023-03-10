@@ -18,8 +18,11 @@ class Telenode {
 		runServer(this);
 	}
 
-	telenodeHandler(reqBody, secretToken) {
-		if (secretToken !== this.#secretToken) {
+	telenodeHandler(reqBody, headersSecretToken, unauthorizedCallback) {
+		if (this.#secretToken && this.#secretToken !== headersSecretToken) {
+			if (unauthorizedCallback) {
+				unauthorizedCallback();
+			}
 			return;
 		}
 		// TODO - get message type and use switch case for the types
