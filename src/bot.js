@@ -3,20 +3,29 @@ const axios = require('axios');
 
 class Telenode {
 	#baseUrl;
+	#secretToken;
 
-	constructor({ apiToken }) {
+	constructor({ apiToken, secretToken }) {
 		this.textHandlers = {};
 		this.arrRegexHandlers = [];
 		this.anyTextHandler = null;
 		this.buttonHandlers = {};
 		this.#baseUrl = 'https://api.telegram.org/bot' + apiToken;
+		this.#secretToken = secretToken;
 	}
 
-	createServer() {
+	createServer(unauthorizedHandler) {
+		this.unauthorizedHandler = unauthorizedHandler;
 		runServer(this);
 	}
 
-	telenodeHandler(reqBody) {
+	telenodeHandler(reqBody, headersSecretToken, unauthorizedCallback) {
+		if (this.#secretToken && this.#secretToken !== headersSecretToken) {
+			if (unauthorizedCallback) {
+				unauthorizedCallback();
+			}
+			return;
+		}
 		// TODO - get message type and use switch case for the types
 		if (!reqBody) {
 			return;

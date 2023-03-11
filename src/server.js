@@ -6,7 +6,8 @@ const runServer = bot => {
 	server.use(express.json());
 
 	server.post('/', (req, res) => {
-		bot.telenodeHandler(req.body);
+		const secretToken = req.headers['x-telegram-bot-api-secret-token'];
+		bot.telenodeHandler(req.body, secretToken, bot.unauthorizedHandler);
 		res.end();
 	});
 

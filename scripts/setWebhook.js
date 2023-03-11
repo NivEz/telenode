@@ -5,16 +5,22 @@ require('dotenv').config();
 
 const apiToken = process.env.API_TOKEN;
 const webhook = process.env.WEBHOOK;
+const secretToken = process.env.SECRET_TOKEN;
 
 const url = `https://api.telegram.org/bot${apiToken}/setWebhook`;
 
 (async () => {
 	try {
-		const res = await axios.post(url, {}, {
-			params: {
-				url: webhook,
+		const res = await axios.post(
+			url,
+			{},
+			{
+				params: {
+					url: webhook,
+					secret_token: secretToken,
+				},
 			},
-		});
+		);
 		if (res.status === 200) {
 			console.log(res.data.description);
 		}
@@ -24,4 +30,3 @@ const url = `https://api.telegram.org/bot${apiToken}/setWebhook`;
 		console.log(e?.code);
 	}
 })();
-
