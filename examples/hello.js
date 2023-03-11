@@ -3,7 +3,6 @@ require('dotenv').config();
 
 const bot = new Telenode({
 	apiToken: process.env.API_TOKEN,
-	secretToken: process.env.SECRET_TOKEN,
 });
 
 bot.createServer();

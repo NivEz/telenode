@@ -7,17 +7,13 @@ const runServer = bot => {
 
 	server.post('/', (req, res) => {
 		const secretToken = req.headers['x-telegram-bot-api-secret-token'];
-		bot.telenodeHandler(req.body, secretToken, callback);
+		bot.telenodeHandler(req.body, secretToken, bot.unauthorizedHandler);
 		res.end();
 	});
 
 	server.listen(port, () => {
 		console.log(`Listening on port ${port}`);
 	});
-};
-
-const callback = () => {
-	console.log('Unauthorized request!');
 };
 
 module.exports = {
