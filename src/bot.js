@@ -14,9 +14,9 @@ class Telenode {
 		this.#secretToken = secretToken;
 	}
 
-	createServer(unauthorizedHandler) {
-		this.unauthorizedHandler = unauthorizedHandler;
-		runServer(this);
+	createServer({ port, unauthorizedCallback } = {}) {
+		this.unauthorizedHandler = unauthorizedCallback;
+		runServer(this, port);
 	}
 
 	telenodeHandler(reqBody, headersSecretToken, unauthorizedCallback) {
