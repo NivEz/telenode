@@ -94,6 +94,8 @@ slightly different from using the installed package like explained above. Instea
 npm run set-webhook
 ```
 
+For local development you should spin up a local express server with the command `bot.createServer()`. More on that will be explained in the <b>Deployment</b> section down below.
+
 The webhook url should be presented in the `.env` file or be exported as an environment variable.
 
 In order to develop a new feature or to run an existing one you should use the `dev` command from the `package.json`
@@ -102,6 +104,31 @@ with the `--file` flag like so:
 ```
 npm run dev --file=<example>
 ```
+
+---
+
+## Deployment:
+
+Since these days it is common to use serverless backend services, you can choose how the bot will work - or with `express` or with the `HTTP` engine of the serverless provider.
+
+In order to spin up an express server you should use the command `bot.createServer()` - this is useful for deployments on VMs / containers / on-premise. 
+
+You can pass an object as options for `createServer`. Currently, it supports `port` and `unauthorizedCallback` (if you use secret token) - e.g:
+```
+bot.createServer({ port: 4000 }) // the default is 3000
+```
+
+In the other hand, if you want to deploy on serverless backend you need to use `bot.telenodeHandler` method and pass to it the request object.
+You will probably have something like this:
+```
+functions.https.onCall((req, res) => {
+    const secretToken = req.headers['x-telegram-bot-api-secret-token'];
+    bot.telenodeHandler(req.body, secretToken, unauthorizedHandler);
+    res.end();
+});
+```
+
+Note that on serverless you should extract by your own the `secretToken` since every serverless service might process the `req` object differently.
 
 ## TODO's
 

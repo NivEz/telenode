@@ -10,7 +10,9 @@ const unauthorizedCallback = () => {
 	console.log('Unauthorized request!');
 };
 
-bot.createServer(unauthorizedCallback);
+bot.createServer({
+	unauthorizedCallback,
+});
 
 bot.onTextMessage('', messageBody => {
 	bot.sendTextMessage(
