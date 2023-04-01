@@ -8,8 +8,7 @@
 	"scripts": {
 		"dev": "nodemon ./scripts/runDev.js",
 		"publish:dry": "npm publish --dry-run",
-		"set-webhook": "node ./scripts/setWebhook.js",
-		"postinstall": "husky install"
+		"set-webhook": "node ./scripts/setWebhook.js"
 	},
 	"bin": {
 		"set-webhook": "./scripts/setWebhook.js"
