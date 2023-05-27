@@ -3,9 +3,9 @@
 const axios = require('axios');
 require('dotenv').config();
 
-const apiToken = process.env.API_TOKEN;
-const webhook = process.env.WEBHOOK;
-const secretToken = process.env.SECRET_TOKEN;
+const apiToken = process.env.API_TOKEN || process.env.npm_config_apiToken;
+const webhook = process.env.WEBHOOK || process.env.npm_config_webhook;
+const secretToken = process.env.SECRET_TOKEN || process.env.npm_config_secretToken;
 
 const url = `https://api.telegram.org/bot${apiToken}/setWebhook`;
 
@@ -21,8 +21,9 @@ const url = `https://api.telegram.org/bot${apiToken}/setWebhook`;
 				},
 			},
 		);
+		console.log('[] Setting webhook:', webhook);
 		if (res.status === 200) {
-			console.log(res.data.description);
+			console.log('[]', res.data.description);
 		}
 	} catch (e) {
 		console.log('Failed setting webhook! Maybe the api token or the webhook are invalid');

@@ -32,9 +32,14 @@ npm install telenode-js
 
 In order to listen to updates from Telegram servers you have to set up a webhook.
 <br>
-The webhook url will be stored in a `.env` file in the root of your project
-as `WEBHOOK=https://your_amazing_webhook.com`.
-<br>
+To use the `npx set-webhook` command you should provide the webhook parameter and api token.
+You can do that by:
+1. Setting the `WEBHOOK` and `API_TOKEN` environment variables (`SECRET_TOKEN` is optional).
+2. Storing them in `.env` file (`SECRET_TOKEN` is optional).
+3. Use the `--apiToken` and `--webhook` command arguments (`--secretToken` is optional).
+
+You also can provide the secret token parameter if you choose to.
+
 Then you can execute the following command:
 
 ```
