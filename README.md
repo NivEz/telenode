@@ -129,7 +129,7 @@ You can run an example from the `telenode-js` directory inside `node_modules` by
 npm run dev --file=<example>
 ```
 
-You might need `nodemon` installed as a dev dependency to run the examples with the command above.
+You might need `nodemon` and `dotenv` installed as dev dependencies to run the examples with the command above.
 
 ---
 
