@@ -1,7 +1,16 @@
 #!/usr/bin/env node
 
 const axios = require('axios');
-require('dotenv').config();
+
+try {
+	require('dotenv').config();
+} catch (e) {
+	if (e.code === 'MODULE_NOT_FOUND') {
+		console.log(
+			'[] dotenv is not installed, trying with environment variables or command line arguments.',
+		);
+	}
+}
 
 const apiToken = process.env.API_TOKEN || process.env.npm_config_apiToken;
 const webhook = process.env.WEBHOOK || process.env.npm_config_webhook;
@@ -26,8 +35,8 @@ const url = `https://api.telegram.org/bot${apiToken}/setWebhook`;
 			console.log('[]', res.data.description);
 		}
 	} catch (e) {
-		console.log('Failed setting webhook! Maybe the api token or the webhook are invalid');
-		console.log(e?.message);
-		console.log(e?.code);
+		console.log('[] Failed setting webhook! Maybe the api token or the webhook are invalid');
+		console.log('  ', e?.message);
+		console.log('  ', e?.code);
 	}
 })();
