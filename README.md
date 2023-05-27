@@ -28,12 +28,34 @@ Lightweight Telegram API framework for Node.js
 npm install telenode-js
 ```
 
+### Install dependencies
+
+In order to reduce the `node_modules` size `dotenv` (for environment variables) and `express` (for local development /
+deployment) packages are defined as `devDependencies`.
+
+You don't have to use these packages if you don't want to, and you can use them only for local development if you choose
+so.
+<br>
+If you do choose to work with these packages, install them manually:
+
+```
+npm install express dotenv
+```
+
+Or for serverless deployments install express as a dev dependency (to use in your local development environment)
+instead:
+
+```
+npm install express --save-dev
+```
+
 ### Set webhook
 
 In order to listen to updates from Telegram servers you have to set up a webhook.
 <br>
 To use the `npx set-webhook` command you should provide the webhook parameter and api token.
 You can do that by:
+
 1. Setting the `WEBHOOK` and `API_TOKEN` environment variables (`SECRET_TOKEN` is optional).
 2. Storing them in `.env` file (`SECRET_TOKEN` is optional).
 3. Use the `--apiToken` and `--webhook` command arguments (`--secretToken` is optional).
@@ -56,7 +78,7 @@ const bot = new Telenode({
 	apiToken: process.env.API_TOKEN,
 });
 
-bot.createServer();
+bot.createServer(); // spins up an express server
 
 bot.onTextMessage('hello', async (messageBody) => {
 	console.log(messageBody);
@@ -67,12 +89,16 @@ bot.onTextMessage('hello', async (messageBody) => {
 In this example the bot will listen only to 'hello' text messages and will respond to the user 'hello back'. Any other
 message will be ignored.
 
+- Note that `bot.createServer()` method requires express, and we are using `dotenev` as well which both are not
+  installed automatically with `Telenode`.
+
 Additional examples can be found in the [examples folder](https://github.com/NivEz/telenode/tree/main/examples).
 
 ### Webhook security with secret token
 
 You can secure your webhook with a secret token via the `setWebhook` method. You can do that by creating
-a `SECRET_TOKEN` variable in the `.env` file of your project and run the `npx set-webhook` command. The command will
+a `SECRET_TOKEN` variable in the `.env` file of your project (or environment variable) and run the `npx set-webhook`
+command. The command will
 tell Telegram servers to send the secret token in each request to your webhook as `x-telegram-bot-api-secret-token`
 header.
 
@@ -84,47 +110,48 @@ You will have to pass a `secretToken` parameter to the `telenodeHandler` method 
 You can pass a third parameter called `unauthorizedCallback` - a callback that will fire in case the request wasn't
 authorized.
 
-You can find the example in the [secretToken.js example](https://github.com/NivEz/telenode/tree/main/examples/secretToken.js) and the implementation in [src/server.js](https://github.com/NivEz/telenode/tree/main/src/server.js) as well.
+You can find the example in
+the [secretToken.js example](https://github.com/NivEz/telenode/tree/main/examples/secretToken.js) and the implementation
+in [src/server.js](https://github.com/NivEz/telenode/tree/main/src/server.js) as well.
 
 ---
 
-## Local development:
+## Run feature examples:
 
-Each feature of `Telenode` is demonstrated in an example file inside the `examples` folder.
+After you have set your webhook you can play and test the `Telenode` features.
 
-For local development you need to set a webhook as well with the `set-webhook` command. How you execute the command is
-slightly different from using the installed package like explained above. Instead of `npx` just use `npm run`:
-
-```
-npm run set-webhook
-```
-
-For local development you should spin up a local express server with the command `bot.createServer()`. More on that will be explained in the <b>Deployment</b> section down below.
-
-The webhook url should be presented in the `.env` file or be exported as an environment variable.
-
-In order to develop a new feature or to run an existing one you should use the `dev` command from the `package.json`
-with the `--file` flag like so:
+Each feature of `Telenode` is demonstrated in an example file inside the `examples` folder (inside `node_modules` if you
+installed `Telenode`).
+<br>
+You can run an example from the `telenode-js` directory inside `node_modules` by using the command:
 
 ```
 npm run dev --file=<example>
 ```
 
+You might need `nodemon` installed as a dev dependency to run the examples with the command above.
+
 ---
 
 ## Deployment:
 
-Since these days it is common to use serverless backend services, you can choose how the bot will work - or with `express` or with the `HTTP` engine of the serverless provider.
+Since these days it is common to use serverless backend services, you can choose how the bot will work - or
+with `express` or with the `HTTP` engine of the serverless provider.
 
-In order to spin up an express server you should use the command `bot.createServer()` - this is useful for deployments on VMs / containers / on-premise. 
+In order to spin up an express server you should use the command `bot.createServer()` - this is useful for deployments
+on VMs / containers / on-premise.
 
-You can pass an object as options for `createServer`. Currently, it supports `port` and `unauthorizedCallback` (if you use secret token) - e.g:
+You can pass an object as options for `createServer`. Currently, it supports `port` and `unauthorizedCallback` (if you
+use secret token) - e.g:
+
 ```
 bot.createServer({ port: 4000 }) // the default is 3000
 ```
 
-In the other hand, if you want to deploy on serverless backend you need to use `bot.telenodeHandler` method and pass to it the request object.
+In the other hand, if you want to deploy on serverless backend you need to use `bot.telenodeHandler` method and pass to
+it the request object.
 You will probably have something like this:
+
 ```
 functions.https.onCall((req, res) => {
     const secretToken = req.headers['x-telegram-bot-api-secret-token'];
@@ -133,7 +160,17 @@ functions.https.onCall((req, res) => {
 });
 ```
 
-Note that on serverless you should extract by your own the `secretToken` since every serverless service might process the `req` object differently.
+Note that on serverless you should extract by your own the `secretToken` since every serverless service might process
+the `req` object differently.
+
+---
+
+## Contributions:
+
+If you want to develop a new feature you should create an example file under the examples' folder that demonstrates how
+to use the feature.
+
+---
 
 ## TODO's
 
