@@ -1,7 +1,7 @@
-const express = require('express');
-const server = express();
-
 const runServer = (bot, port = 3000) => {
+	const express = require('express');
+	const server = express();
+
 	server.use(express.json());
 
 	server.post('/', (req, res) => {
