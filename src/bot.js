@@ -1,4 +1,5 @@
 const { runServer } = require('./server');
+const { longPoll } = require('./longPolling');
 const axios = require('axios');
 
 class Telenode {
@@ -19,7 +20,16 @@ class Telenode {
 		runServer(this, port);
 	}
 
+	startLongPolling({ pollingDelay } = {}) {
+		longPoll({
+			bot: this,
+			pollingDelay,
+			url: this.#baseUrl,
+		});
+	}
+
 	telenodeHandler(reqBody, headersSecretToken, unauthorizedCallback) {
+		// Note that if using long polling the secret token and unauthorizedCallback are irrelevant
 		if (this.#secretToken && this.#secretToken !== headersSecretToken) {
 			if (unauthorizedCallback) {
 				unauthorizedCallback();

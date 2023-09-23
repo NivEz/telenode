@@ -19,6 +19,8 @@ Lightweight Telegram API framework for Node.js
 ✅ Buttons support (inline keyboard, reply keyboard and remove reply keyboard)
 <br>
 ✅ Secret token support
+<br>
+✅ Long polling support
 
 ## Getting started
 
@@ -67,6 +69,16 @@ Then you can execute the following command:
 ```
 npx set-webhook
 ```
+
+### Long polling
+
+If you prefer to use long polling method over creating a server with webhook you can use the `startLongPolling` method instead of `createServer`.
+<br>
+The method accepts `pollingDelay` - a number that represents milliseconds (must be at least 50ms).
+<br>
+You can view an example of long polling usage [here](https://github.com/NivEz/telenode/tree/main/examples/long-polling.js).
+
+Note that long polling is usually not recommended and webhook is preferred for most use cases.
 
 ### Usage
 
