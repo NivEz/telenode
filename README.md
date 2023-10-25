@@ -76,6 +76,10 @@ If you prefer to use long polling method over creating a server with webhook you
 <br>
 The method accepts `pollingDelay` - a number that represents milliseconds (must be at least 50ms).
 <br>
+By default the long polling mechanism will ignore all previous updates (`cleanPreviousUpdates` by default is `true`). You can toggle off `cleanPreviousUpdates` if you want to by setting it as `false` when you call `startLongPolling`.
+<br>
+You also can stop the long polling while it's running by setting `bot.useLongPolling` to `false`.
+<br>
 You can view an example of long polling usage [here](https://github.com/NivEz/telenode/tree/main/examples/long-polling.js).
 
 Note that long polling is usually not recommended and webhook is preferred for most use cases.
