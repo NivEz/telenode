@@ -27,3 +27,8 @@ const inlineKeyboard = [
 		},
 	],
 ];
+
+// After 30 seconds the long polling will stop
+setTimeout(() => {
+	bot.useLongPolling = false;
+}, 30000);

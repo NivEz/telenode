@@ -1,16 +1,17 @@
 const axios = require('axios');
 
-const longPoll = async ({ bot, pollingDelay = 1000, url }) => {
+const longPoll = async ({ bot, pollingDelay = 1000, cleanPreviousUpdates = true, url }) => {
 	if (pollingDelay < 50) {
 		throw new Error('Polling delay must be at least 50ms');
 	}
 	let offset = 0;
-	while (true) {
+	if (cleanPreviousUpdates) {
+		const recentUpdates = await getUpdates(url, -1);
+		offset = recentUpdates[0]?.update_id + 1 || 0;
+	}
+	while (bot.useLongPolling) {
 		try {
-			const res = await axios.get(url + '/getUpdates', {
-				params: { offset },
-			});
-			const updates = res.data.result;
+			const updates = await getUpdates(url, offset);
 			updates.forEach(update => {
 				bot.telenodeHandler(update);
 				offset = update.update_id + 1;
@@ -30,6 +31,14 @@ const longPoll = async ({ bot, pollingDelay = 1000, url }) => {
 		}
 		await sleep(pollingDelay);
 	}
+	console.log('Long polling stopped...');
+};
+
+const getUpdates = async (url, offset) => {
+	const res = await axios.get(url + '/getUpdates', {
+		params: { offset },
+	});
+	return res.data.result;
 };
 
 module.exports = {
