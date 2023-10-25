@@ -13,17 +13,23 @@ class Telenode {
 		this.buttonHandlers = {};
 		this.#baseUrl = 'https://api.telegram.org/bot' + apiToken;
 		this.#secretToken = secretToken;
+		this.useLongPolling = false;
 	}
 
 	createServer({ port, unauthorizedCallback } = {}) {
 		this.unauthorizedHandler = unauthorizedCallback;
+		if (this.useLongPolling) {
+			throw Error('Cannot start server while long polling is active');
+		}
 		runServer(this, port);
 	}
 
-	startLongPolling({ pollingDelay } = {}) {
+	startLongPolling({ pollingDelay, cleanPreviousUpdates } = {}) {
+		this.useLongPolling = true;
 		longPoll({
 			bot: this,
 			pollingDelay,
+			cleanPreviousUpdates,
 			url: this.#baseUrl,
 		});
 	}
