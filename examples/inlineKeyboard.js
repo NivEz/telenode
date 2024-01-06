@@ -24,6 +24,13 @@ bot.onButton('hello', callbackQuery => {
 	bot.sendTextMessage(`Hello ${senderName}! How are you?`, callbackQuery.message.chat.id);
 });
 
+bot.onButton('', callbackQuery => {
+	bot.sendTextMessage(
+		'The random button was pressed, it was targeted via the button handler with empty string parameter',
+		callbackQuery.message.chat.id,
+	);
+});
+
 const inlineKeyboard = [
 	[
 		{
@@ -39,6 +46,12 @@ const inlineKeyboard = [
 		{
 			text: 'Exit',
 			callback_data: 'exit',
+		},
+	],
+	[
+		{
+			text: 'Random button (onButton with empty string)',
+			callback_data: 'random',
 		},
 	],
 ];
