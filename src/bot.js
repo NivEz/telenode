@@ -11,6 +11,7 @@ class Telenode {
 		this.arrRegexHandlers = [];
 		this.anyTextHandler = null;
 		this.buttonHandlers = {};
+		this.anyButtonHandler = null;
 		this.#baseUrl = 'https://api.telegram.org/bot' + apiToken;
 		this.#secretToken = secretToken;
 		this.useLongPolling = false;
@@ -87,6 +88,11 @@ class Telenode {
 		const buttonHandler = this.buttonHandlers[buttonData];
 		if (buttonHandler) {
 			buttonHandler(callbackQuery);
+			return;
+		}
+		// Similar to the text message handler, this should be the final step to validate that no matches occurred
+		if (this.anyButtonHandler) {
+			this.anyButtonHandler(callbackQuery);
 		}
 	}
 
@@ -106,10 +112,14 @@ class Telenode {
 	}
 
 	onButton(buttonDataTrigger, handler) {
-		if (!buttonDataTrigger || typeof buttonDataTrigger !== 'string') {
+		if (typeof buttonDataTrigger !== 'string') {
 			return;
 		}
-		this.buttonHandlers[buttonDataTrigger] = handler;
+		if (buttonDataTrigger === '') {
+			this.anyButtonHandler = handler;
+		} else {
+			this.buttonHandlers[buttonDataTrigger] = handler;
+		}
 	}
 
 	async sendTextMessage(text, chatId) {
