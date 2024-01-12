@@ -1,0 +1,121 @@
+name: Bump and Release
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  bump-choice:
+    runs-on: ubuntu-latest
+    outputs:
+      user-choice: ${{ steps.bump-input.outputs.user-choice }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Get bump input from Telegram
+        id: bump-input
+        uses: NivEz/interactive-inputs-action@v1
+        with:
+          telegram-api-token: ${{ secrets.TELEGRAM_API_TOKEN }}
+          telegram-chat-id: ${{ secrets.TELEGRAM_CHAT_ID }}
+          question: 'Updating Telenode. Which bump type you wish to perform?'
+          options: '["prerelease", "patch", "minor", "major", "skip"]'
+          default-choice: 'skip'
+          message: 'The selected bump type is: %s'
+          timeout: 45
+          wait-for-timeout-to-finish: true
+
+  bump:
+    runs-on: ubuntu-latest
+    needs: bump-choice
+    if: needs.bump-choice.outputs.user-choice != 'skip'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup git config
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "${{ secrets.GIT_CONFIG_EMAIL }}"
+
+      - name: Bump version
+        run: npm version ${{ needs.bump-choice.outputs.user-choice }} -m "v%s"
+
+      - name: Push
+        run: git push --follow-tags
+
+      - name: Build success message
+        id: success-message
+        run: |
+          latest_tag="$(git describe --abbrev=0 --tags)"
+          message="Successfully bumped a [${{ needs.bump-choice.outputs.user-choice }}] update: $latest_tag"
+          echo $message
+          echo "message=$message" >> $GITHUB_OUTPUT
+
+      - name: Send message
+        uses: NivEz/interactive-inputs-action@v1
+        with:
+          telegram-api-token: ${{ secrets.TELEGRAM_API_TOKEN }}
+          telegram-chat-id: ${{ secrets.TELEGRAM_CHAT_ID }}
+          simple-message: ${{ steps.success-message.outputs.message }}
+
+  publish-choice:
+    runs-on: ubuntu-latest
+    needs: bump
+    outputs:
+      user-choice: ${{ steps.publish-input.outputs.user-choice }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Check if should publish
+        id: publish-input
+        uses: NivEz/interactive-inputs-action@v1
+        with:
+          telegram-api-token: ${{ secrets.TELEGRAM_API_TOKEN }}
+          telegram-chat-id: ${{ secrets.TELEGRAM_CHAT_ID }}
+          question: 'Should publish to npm?'
+          options: '["yes", "no"]'
+          default-choice: 'no'
+          message: 'The selected choice is: %s'
+          timeout: 45
+          wait-for-timeout-to-finish: true
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: publish-choice
+    if: needs.publish-choice.outputs.user-choice == 'yes'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Publish package to npm
+        id: publish
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create Github release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.publish.outputs.version }}
+          generateReleaseNotes: true
+
+      - name: Success message
+        uses: NivEz/interactive-inputs-action@v1
+        with:
+          telegram-api-token: ${{ secrets.TELEGRAM_API_TOKEN }}
+          telegram-chat-id: ${{ secrets.TELEGRAM_CHAT_ID }}
+          simple-message: 'Successfully published a new version: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}'
+
+      - name: Failure message
+        if: failure()
+        uses: NivEz/interactive-inputs-action@v1
+        with:
+          telegram-api-token: ${{ secrets.TELEGRAM_API_TOKEN }}
+          telegram-chat-id: ${{ secrets.TELEGRAM_CHAT_ID }}
+          simple-message: 'Failure occurred with the new version ${{ steps.publish.outputs.version }}'
