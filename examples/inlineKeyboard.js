@@ -31,6 +31,31 @@ bot.onButton('', callbackQuery => {
 	);
 });
 
+bot.onButton('edit', callbackQuery => {
+	inlineKeyboard.push([
+		{
+			text: 'New button - remove me',
+			callback_data: 'remove',
+		},
+	]);
+	bot.editInlineKeyboard(
+		callbackQuery.message.chat.id,
+		callbackQuery.message.message_id,
+		null,
+		inlineKeyboard,
+	);
+});
+
+bot.onButton('remove', callbackQuery => {
+	inlineKeyboard.pop();
+	bot.editInlineKeyboard(
+		callbackQuery.message.chat.id,
+		callbackQuery.message.message_id,
+		null,
+		inlineKeyboard,
+	);
+});
+
 const inlineKeyboard = [
 	[
 		{
@@ -52,6 +77,12 @@ const inlineKeyboard = [
 		{
 			text: 'Random button (onButton with empty string)',
 			callback_data: 'random',
+		},
+	],
+	[
+		{
+			text: 'Add button - edit (editMessageReplyMarkup)',
+			callback_data: 'edit',
 		},
 	],
 ];

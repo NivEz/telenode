@@ -144,6 +144,23 @@ class Telenode {
 		});
 	}
 
+	async editInlineKeyboard(chatId, messageId, inlineMessageId, inlineKeyboard) {
+		if (!inlineMessageId && (!chatId || !messageId)) {
+			throw new Error(
+				'inlineMessageId is required when chatId and messageId are not specified',
+			);
+		}
+		const url = this.#baseUrl + '/editMessageReplyMarkup';
+		return await axios.post(url, {
+			chat_id: chatId,
+			message_id: messageId,
+			inline_message_id: inlineMessageId,
+			reply_markup: {
+				inline_keyboard: inlineKeyboard,
+			},
+		});
+	}
+
 	async sendReplyKeyboard(chatId, text, replyKeyboard, oneTimeKeyboard) {
 		if (!text) {
 			throw Error('text parameter is required');

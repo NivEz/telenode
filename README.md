@@ -12,11 +12,15 @@ Lightweight Telegram API framework for Node.js
 
 ✅ Explicit messages handlers
 <br>
-✅ Fallback messages handler (empty string)
+✅ Fallback messages handler (empty string - any messages)
 <br>
 ✅ Regex matching on text messages
 <br>
 ✅ Buttons support (inline keyboard, reply keyboard and remove reply keyboard)
+<br>
+✅ Fallback handler for any button (empty string - button callback_data)
+<br>
+✅ Edit inline keyboards
 <br>
 ✅ Secret token support
 <br>
@@ -70,9 +74,16 @@ Then you can execute the following command:
 npx set-webhook
 ```
 
+* If you want to delete a webhook use the command:
+
+```
+npx delete-webhook
+```
+
 ### Long polling
 
-If you prefer to use long polling method over creating a server with webhook you can use the `startLongPolling` method instead of `createServer`.
+If you prefer to use long polling method over creating a server with webhook you can use the `startLongPolling` method instead of `createServer`. If you have a webhook set up already, you need to delete it, you can use the `npx delete-webhook` command to delete it.
+
 <br>
 The method accepts `pollingDelay` - a number that represents milliseconds (must be at least 50ms).
 <br>
@@ -194,6 +205,5 @@ to use the feature.
 - [ ] Chat ID handlers
 - [ ] Arguments validations
 - [ ] Optimize Telegram API requests
-- [ ] Support edit reply markup
 - [ ] Add extra security with query params token
 - [ ] Add tests
