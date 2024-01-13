@@ -10,7 +10,7 @@
 		"publish:dry": "npm publish --dry-run",
 		"set-webhook": "node ./scripts/setWebhook.js",
 		"delete-webhook": "node ./scripts/deleteWebhook.js",
-		"prepare": "husky install",
+		"postinstall": "husky install",
 		"format": "npx prettier . --write"
 	},
 	"bin": {
