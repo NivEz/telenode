@@ -30,7 +30,7 @@ Lightweight Telegram API framework for Node.js
 
 ### Installation
 
-```
+```shellscript
 npm install telenode-js
 ```
 
@@ -44,14 +44,14 @@ so.
 <br>
 If you do choose to work with these packages, install them manually:
 
-```
+```shellscript
 npm install express dotenv
 ```
 
 Or for serverless deployments install express as a dev dependency (to use in your local development environment)
 instead:
 
-```
+```shellscript
 npm install express --save-dev
 ```
 
@@ -70,13 +70,13 @@ You also can provide the secret token parameter if you choose to.
 
 Then you can execute the following command:
 
-```
+```shellscript
 npx set-webhook
 ```
 
 * If you want to delete a webhook use the command:
 
-```
+```shellscript
 npx delete-webhook
 ```
 
@@ -97,7 +97,7 @@ Note that long polling is usually not recommended and webhook is preferred for m
 
 ### Usage
 
-```
+```js
 const Telenode = require('telenode-js');
 require('dotenv').config();
 
@@ -152,7 +152,7 @@ installed `Telenode`).
 <br>
 You can run an example from the `telenode-js` directory inside `node_modules` by using the command:
 
-```
+```shellscript
 npm run dev --file=<example>
 ```
 
@@ -171,7 +171,7 @@ on VMs / containers / on-premise.
 You can pass an object as options for `createServer`. Currently, it supports `port` and `unauthorizedCallback` (if you
 use secret token) - e.g:
 
-```
+```js
 bot.createServer({ port: 4000 }) // the default is 3000
 ```
 
@@ -179,7 +179,7 @@ In the other hand, if you want to deploy on serverless backend you need to use `
 it the request object.
 You will probably have something like this:
 
-```
+```js
 functions.https.onCall((req, res) => {
     const secretToken = req.headers['x-telegram-bot-api-secret-token'];
     bot.telenodeHandler(req.body, secretToken, unauthorizedHandler);
