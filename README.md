@@ -25,8 +25,12 @@ Lightweight Telegram API framework for Node.js
 ✅ Secret token support
 <br>
 ✅ Long polling support
+<br>
+✅ Sending chat action
 
 ## Getting started
+
+#### Complete example can be found [here](https://github.com/NivEz/movie-info-bot)
 
 ### Installation
 
