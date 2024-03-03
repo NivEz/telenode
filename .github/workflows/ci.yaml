@@ -22,11 +22,11 @@ jobs:
         with:
           telegram-api-token: ${{ secrets.TELEGRAM_API_TOKEN }}
           telegram-chat-id: ${{ secrets.TELEGRAM_CHAT_ID }}
-          question: 'Updating Telenode. Which bump type you wish to perform?'
+          question: 'Updating Telenode. Which bump type you wish to perform? Default is "skip"'
           options: '["prerelease", "patch", "minor", "major", "skip"]'
           default-choice: 'skip'
           message: 'The selected bump type is: %s'
-          timeout: 45
+          timeout: 30
           wait-for-timeout-to-finish: true
 
   bump:
@@ -78,11 +78,11 @@ jobs:
         with:
           telegram-api-token: ${{ secrets.TELEGRAM_API_TOKEN }}
           telegram-chat-id: ${{ secrets.TELEGRAM_CHAT_ID }}
-          question: 'Should publish to npm?'
+          question: 'Should publish to npm? Default is "no"'
           options: '["yes", "no"]'
           default-choice: 'no'
           message: 'The selected choice is: %s'
-          timeout: 45
+          timeout: 30
           wait-for-timeout-to-finish: true
 
   publish:
