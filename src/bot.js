@@ -5,6 +5,19 @@ const axios = require('axios');
 class Telenode {
 	#baseUrl;
 	#secretToken;
+	validChatActions = [
+		'typing',
+		'upload_photo',
+		'record_video',
+		'upload_video',
+		'record_voice',
+		'upload_voice',
+		'upload_document',
+		'choose_sticker',
+		'find_location',
+		'record_video_note',
+		'upload_video_note',
+	];
 
 	constructor({ apiToken, secretToken }) {
 		this.textHandlers = {};
@@ -184,6 +197,21 @@ class Telenode {
 			reply_markup: {
 				remove_keyboard: true,
 			},
+		});
+	}
+
+	async sendChatAction(chatId, chatAction) {
+		if (!this.validChatActions.includes(chatAction)) {
+			throw new Error(
+				`Invalid chat action. Valid chat action should be one of: ${this.validChatActions.join(
+					', ',
+				)}`,
+			);
+		}
+		const url = this.#baseUrl + '/sendChatAction';
+		await axios.post(url, {
+			chat_id: chatId,
+			action: chatAction,
 		});
 	}
 }
