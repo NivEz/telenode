@@ -5,6 +5,8 @@ Lightweight Telegram API framework for Node.js
 ![npm package](https://img.shields.io/badge/-grey?logo=telegram)
 [![npm package](https://img.shields.io/npm/v/telenode-js?color=orange&logo=npm)](https://www.npmjs.org/package/telenode-js)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-green.svg)](https://raw.githubusercontent.com/NivEz/telenode/main/LICENSE)
+![total downloads](https://img.shields.io/npm/d18m/telenode-js.svg)
+![monthly downloads](https://img.shields.io/npm/dm/telenode-js.svg)
 
 ---
 
