@@ -122,7 +122,7 @@ bot.onTextMessage('hello', async (messageBody) => {
 In this example the bot will listen only to 'hello' text messages and will respond to the user 'hello back'. Any other
 message will be ignored.
 
-- Note that `bot.createServer()` method requires express, and we are using `dotenev` as well which both are not
+- Note that `bot.createServer()` method requires `express`, and we are using `dotenev` as well which both are not
   installed automatically with `Telenode`.
 
 Additional examples can be found in the [examples folder](https://github.com/NivEz/telenode/tree/main/examples).
